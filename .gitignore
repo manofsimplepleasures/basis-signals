@@ -1,0 +1,8 @@
+raw/
+logs/
+data/latest.json
+data/archive/
+__pycache__/
+*.pyc
+.DS_Store
+._*

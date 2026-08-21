@@ -1,0 +1,21 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  html-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check generator syntax
+        run: python -m py_compile scripts/generate_site.py scripts/acceptance_intelligence.py
+      - name: Check committed page
+        run: |
+          test -s index.html
+          grep -q 'Базис - Сигналы' index.html
+          grep -q 'ОБНОВЛЕНО 05:00 МСК' index.html
