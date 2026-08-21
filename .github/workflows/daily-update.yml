@@ -1,0 +1,57 @@
+name: daily signal update
+
+on:
+  schedule:
+    # GitHub Actions uses UTC. 02:00 UTC = 05:00 MSK.
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+env:
+  CHANNELS: mrnadzor KIRILLPRIEMKA tehpriemka specnovostroy_ch revizor_priemka priemka_moscow pro_smarent iliilitop
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Collect latest public signals
+        run: |
+          rm -rf raw
+          mkdir -p raw
+          python scripts/acceptance_intelligence.py \
+            --pages 4 \
+            --channels $CHANNELS \
+            --output-dir raw
+      - name: Build site and update cumulative public history
+        run: |
+          python scripts/generate_site.py \
+            --input raw/acceptance-posts.jsonl \
+            --outdir . \
+            --days 14 \
+            --limit 24 \
+            --keep-days 60
+          python scripts/update_history.py \
+            --latest data/latest.min.json \
+            --history data/signals.min.jsonl \
+            --snapshots data/snapshots
+      - name: Commit updated dataset and site
+        run: |
+          git config user.name "basis-signals-bot"
+          git config user.email "basis-signals-bot@users.noreply.github.com"
+          git add index.html data/latest.min.json data/signals.min.jsonl data/snapshots/*.min.json.gz
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore(data): daily signal refresh"
+            git push
+          fi

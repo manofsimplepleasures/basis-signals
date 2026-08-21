@@ -12,10 +12,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Check generator syntax
-        run: python -m py_compile scripts/generate_site.py scripts/acceptance_intelligence.py
+      - name: Check script syntax
+        run: python -m py_compile scripts/generate_site.py scripts/update_history.py scripts/acceptance_intelligence.py
       - name: Check committed page
         run: |
           test -s index.html
           grep -q 'Базис - Сигналы' index.html
           grep -q 'ОБНОВЛЕНО 05:00 МСК' index.html
+      - name: Check public history dataset
+        run: |
+          test -s data/latest.min.json
+          test -s data/signals.min.jsonl
