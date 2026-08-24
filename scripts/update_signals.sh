@@ -9,13 +9,21 @@ python3 scripts/acceptance_intelligence.py \
   --pages "${BASIS_SIGNAL_PAGES:-4}" \
   --channels mrnadzor KIRILLPRIEMKA tehpriemka specnovostroy_ch revizor_priemka priemka_moscow pro_smarent iliilitop cityprofmsk nikita_ooobrik expert_novostroy moydom_estate sudex priemka_komandask priemka_krd \
   --output-dir "$RAW_DIR" \
-  >> "$LOG_DIR/update.log" 2>&1
+  2>&1 | tee -a "$LOG_DIR/update.log" "$RAW_DIR/collect.out"
+FETCHED_TOTAL="$(python3 - <<'PY' "$RAW_DIR/collect.out"
+import re, sys
+text=open(sys.argv[1], encoding='utf-8', errors='ignore').read()
+m=re.search(r'Fetched\s+(\d+)\s+posts', text)
+print(m.group(1) if m else '')
+PY
+)"
 python3 scripts/generate_site.py \
   --input "$RAW_DIR/acceptance-posts.jsonl" \
   --outdir "$BASE_DIR" \
   --days 14 \
   --limit 24 \
   --keep-days 60 \
+  --fetched-total "${FETCHED_TOTAL:-0}" \
   >> "$LOG_DIR/update.log" 2>&1
 python3 scripts/update_history.py \
   --latest "$BASE_DIR/data/latest.min.json" \

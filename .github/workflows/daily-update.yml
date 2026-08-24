@@ -31,7 +31,9 @@ jobs:
           python scripts/acceptance_intelligence.py \
             --pages 4 \
             --channels $CHANNELS \
-            --output-dir raw
+            --output-dir raw 2>&1 | tee raw/collect.out
+          FETCHED_TOTAL=$(python -c "import re; text=open('raw/collect.out', encoding='utf-8', errors='ignore').read(); m=re.search(r'Fetched\\s+(\\d+)\\s+posts', text); print(m.group(1) if m else '')")
+          echo "FETCHED_TOTAL=$FETCHED_TOTAL" >> "$GITHUB_ENV"
       - name: Build site and update cumulative public history
         run: |
           python scripts/generate_site.py \
@@ -39,7 +41,8 @@ jobs:
             --outdir . \
             --days 14 \
             --limit 24 \
-            --keep-days 60
+            --keep-days 60 \
+            --fetched-total "${FETCHED_TOTAL:-0}"
           python scripts/update_history.py \
             --latest data/latest.min.json \
             --history data/signals.min.jsonl \
