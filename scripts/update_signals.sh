@@ -7,7 +7,7 @@ mkdir -p "$RAW_DIR" "$LOG_DIR" "$BASE_DIR/data/archive" "$BASE_DIR/data/snapshot
 cd "$BASE_DIR"
 python3 scripts/acceptance_intelligence.py \
   --pages "${BASIS_SIGNAL_PAGES:-4}" \
-  --channels mrnadzor KIRILLPRIEMKA tehpriemka specnovostroy_ch revizor_priemka priemka_moscow pro_smarent iliilitop \
+  --channels mrnadzor KIRILLPRIEMKA tehpriemka specnovostroy_ch revizor_priemka priemka_moscow pro_smarent iliilitop cityprofmsk nikita_ooobrik expert_novostroy moydom_estate sudex priemka_komandask priemka_krd \
   --output-dir "$RAW_DIR" \
   >> "$LOG_DIR/update.log" 2>&1
 python3 scripts/generate_site.py \

@@ -21,10 +21,17 @@ CHANNELS = [
     "priemka_moscow",
     "pro_smarent",
     "iliilitop",
+    "cityprofmsk",
+    "nikita_ooobrik",
+    "expert_novostroy",
+    "moydom_estate",
+    "sudex",
+    "priemka_komandask",
+    "priemka_krd",
 ]
 
-INSPECTION_CHANNELS = {"mrnadzor", "KIRILLPRIEMKA", "tehpriemka", "specnovostroy_ch", "revizor_priemka", "priemka_moscow"}
-ENRICHMENT_CHANNELS = {"pro_smarent", "iliilitop"}
+INSPECTION_CHANNELS = {"mrnadzor", "KIRILLPRIEMKA", "tehpriemka", "specnovostroy_ch", "revizor_priemka", "priemka_moscow", "cityprofmsk", "nikita_ooobrik", "expert_novostroy", "sudex", "priemka_komandask", "priemka_krd"}
+ENRICHMENT_CHANNELS = {"pro_smarent", "iliilitop", "moydom_estate"}
 MOSCOW = ZoneInfo("Europe/Moscow")
 
 
@@ -166,7 +173,7 @@ def channel_links(channels: list[str]) -> str:
 
 
 def build_html(items: list[dict], all_window: list[dict], start: datetime, end: datetime, generated_at: datetime, last_signal: datetime | None) -> str:
-    channels = sorted({i.get("source_channel") for i in all_window if i.get("source_channel")}) or CHANNELS
+    channels = CHANNELS
     by_stage = Counter(i.get("stage") or "не классифицировано" for i in items)
     by_cat = Counter(c for i in items for c in (i.get("categories") or []))
     rc_count = sum(1 for i in all_window if i.get("residential_complexes"))

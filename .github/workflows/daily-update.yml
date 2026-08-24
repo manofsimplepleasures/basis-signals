@@ -12,7 +12,7 @@ permissions:
   id-token: write
 
 env:
-  CHANNELS: mrnadzor KIRILLPRIEMKA tehpriemka specnovostroy_ch revizor_priemka priemka_moscow pro_smarent iliilitop
+  CHANNELS: mrnadzor KIRILLPRIEMKA tehpriemka specnovostroy_ch revizor_priemka priemka_moscow pro_smarent iliilitop cityprofmsk nikita_ooobrik expert_novostroy moydom_estate sudex priemka_komandask priemka_krd
 
 jobs:
   update-data:
