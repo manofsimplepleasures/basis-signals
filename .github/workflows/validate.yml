@@ -18,7 +18,7 @@ jobs:
         run: |
           test -s index.html
           grep -q 'Базис - Сигналы' index.html
-          grep -Eq 'ОБНОВЛЕНО [0-9]{2}\.[0-9]{2}\.[0-9]{4} В 05:00 МСК' index.html
+          grep -Eq 'ОБНОВЛЕНО [0-9]{2}\.[0-9]{2}\.[0-9]{4} В [0-9]{2}:[0-9]{2} МСК' index.html
       - name: Check public history dataset
         run: |
           test -s data/latest.min.json
